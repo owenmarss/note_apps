@@ -24,6 +24,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,15 +40,23 @@ class MainActivity : ComponentActivity() {
         setContent {
             NotesTheme {
                 // A surface container using the 'background' color from the theme
+                val notes = mutableListOf("Note 1", "Note 2", "Note 3")
 
-                val listNote:MutableList<String> = mutableListOf("Note 1", "Note 2", "Note 3")
+//                val listNote:MutableList<String> = mutableListOf("Note 1", "Note 2", "Note 3")
+                var listNote by remember {
+                    mutableStateOf(notes)
+//                    mutableStateOf(mutableListOf("Note 1", "Note 2", "Note 3"))
+                }
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Scaffold(floatingActionButton = {
-                        FloatingActionButton(onClick = { /*TODO*/ }) {
+                        FloatingActionButton(onClick = {
+                            notes.add("Note 4")
+                            listNote.addAll(notes)
+                        }) {
                             Icon(Icons.Default.Add, contentDescription = null)
                         }
                     }) {
@@ -54,7 +66,7 @@ class MainActivity : ComponentActivity() {
                                 .padding(16.dp)
                         ) {
                             LazyColumn(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                                items(listNote) {title ->
+                                items(notes) {title ->
                                     Card(Modifier.fillMaxWidth()) {
                                         Column(Modifier.padding(8.dp)) {
                                             Text(text = title)
